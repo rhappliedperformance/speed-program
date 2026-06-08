@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luc Gigon — Speed Programm · 09.06–26.07</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0e0f11;--surface:#16181c;--border:#2a2d35;
+    --accent:#d4f53c;--accent2:#3cffa0;--accent3:#ff6b35;--accent4:#38bdf8;--accent5:#c084fc;
+    --text:#e8eaed;--muted:#6b7280;
+    --heading:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;
+  }
+  body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0d0f1a 0%,#151a28 60%,#0e0f11 100%);border-bottom:1px solid var(--border);padding:28px 24px 22px;position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(212,245,60,0.06) 0%,transparent 65%);pointer-events:none}
+  .tag{display:inline-flex;align-items:center;background:rgba(212,245,60,0.1);color:var(--accent);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  .hero h1{font-family:var(--heading);font-size:clamp(30px,7vw,48px);line-height:.92;letter-spacing:.02em;color:#fff;margin-bottom:6px}
+  .hero h1 span{color:var(--accent)}
+  .hero-sub{font-size:12px;color:var(--muted);margin-bottom:12px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:7px}
+  .hero-pill{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:5px;padding:3px 9px}
+  .hero-pill b{color:var(--text)}
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+  /* PROFILE BAR */
+  .profile-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .prof-item{font-size:11px;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;padding:3px 9px}
+  .prof-item b{color:var(--text)}
+  .prof-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:4px}
+  .pb-warn{background:rgba(255,107,53,0.12);color:var(--accent3);border:1px solid rgba(255,107,53,0.25)}
+  .pb-good{background:rgba(60,255,160,0.1);color:var(--accent2);border:1px solid rgba(60,255,160,0.2)}
+  .pb-weak{background:rgba(212,245,60,0.08);color:var(--accent);border:1px solid rgba(212,245,60,0.2)}
+
+  .container{padding:18px 16px;max-width:720px;margin:0 auto}
+
+  /* WEEK TABS */
+  .week-tabs{display:flex;gap:5px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+  .week-tab{flex-shrink:0;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:var(--body);font-size:11px;font-weight:700;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;text-align:center;min-width:90px}
+  .week-tab:hover{border-color:var(--accent);color:var(--accent)}
+  .week-tab.active{background:var(--accent);border-color:var(--accent);color:#0e0f11}
+  .week-tab.ferien{min-width:110px}
+  .week-tab.ferien.active{background:var(--accent2);border-color:var(--accent2);color:#0e0f11}
+  .week-tab.restart.active{background:var(--accent5);border-color:var(--accent5);color:#0e0f11}
+  .week-tab.glossar.active{background:var(--accent4);border-color:var(--accent4);color:#0e0f11}
+  .week-tab .wk-dates{display:block;font-size:9px;font-weight:500;opacity:.75;margin-top:2px;letter-spacing:.02em;text-transform:none}
+
+  /* WEEK PROGRESS */
+  .week-prog{margin-bottom:16px}
+  .wp-top{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+  .wp-bar{height:3px;background:var(--border);border-radius:2px}
+  .wp-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .4s ease}
+
+  /* LEGEND */
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:3px 8px}
+  .leg-dot{width:7px;height:7px;border-radius:50%}
+
+  /* DAY STRIP */
+  .day-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px}
+  .day-btn{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 6px;cursor:pointer;transition:all .15s;text-align:center;position:relative;overflow:hidden}
+  .day-btn:hover{border-color:#3a3d45}
+  .day-btn.active{border-color:var(--accent);background:rgba(212,245,60,0.06)}
+  .day-btn.active::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+  .day-btn.inactive{opacity:.35;cursor:default;pointer-events:none}
+  .day-btn-label{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:2px}
+  .day-btn-name{font-family:var(--heading);font-size:17px;line-height:1;color:var(--text);margin-bottom:4px}
+  .day-btn.active .day-btn-name{color:var(--accent)}
+  .day-btn-date{font-size:9px;color:var(--muted);margin-bottom:4px}
+  .day-btn-badge{display:inline-block;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:4px}
+  .b-sprint{background:rgba(212,245,60,0.12);color:var(--accent)}
+  .b-rsa{background:rgba(255,107,53,0.12);color:var(--accent3)}
+  .b-topup{background:rgba(56,189,248,0.12);color:var(--accent4)}
+  .b-team{background:rgba(192,132,252,0.12);color:var(--accent5)}
+  .b-rest{background:rgba(255,255,255,0.06);color:var(--muted)}
+
+  /* SESSION */
+  .session-header-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 15px;margin-bottom:11px;display:flex;align-items:center;gap:13px}
+  .session-icon-big{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .si-sprint{background:rgba(212,245,60,0.1)}
+  .si-rsa{background:rgba(255,107,53,0.1)}
+  .si-topup{background:rgba(56,189,248,0.1)}
+  .si-rest{background:rgba(255,255,255,0.05)}
+  .si-green{background:rgba(60,255,160,0.1)}
+  .session-title-block h2{font-family:var(--heading);font-size:19px;letter-spacing:.03em;line-height:1.1}
+  .session-title-block p{font-size:11px;color:var(--muted);margin-top:2px}
+  .session-stats{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+  .stat-chip{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:11px}
+  .stat-chip span{color:var(--muted)}
+  .stat-chip b{color:var(--text)}
+  .session-note{background:rgba(212,245,60,0.05);border:1px solid rgba(212,245,60,0.18);border-left:3px solid var(--accent);border-radius:7px;padding:8px 12px;margin-bottom:12px;font-size:12px;color:var(--muted);line-height:1.6}
+  .session-note b{color:var(--accent)}
+
+  /* BLOCKS */
+  .blocks{display:flex;flex-direction:column;gap:7px}
+  .block-card{background:var(--surface);border:1px solid var(--border);border-radius:9px;overflow:hidden}
+  .block-header{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;cursor:pointer}
+  .block-header-left{display:flex;align-items:center;gap:9px}
+  .block-num{font-family:var(--heading);font-size:18px;color:var(--accent);opacity:.3;line-height:1;min-width:18px}
+  .block-info h4{font-size:13px;font-weight:600}
+  .block-info p{font-size:11px;color:var(--muted);margin-top:1px}
+  .block-right{display:flex;align-items:center;gap:6px}
+  .type-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:4px}
+  .tt-sprint{background:rgba(212,245,60,0.12);color:var(--accent)}
+  .tt-plyo{background:rgba(60,255,160,0.12);color:var(--accent2)}
+  .tt-cod{background:rgba(255,107,53,0.12);color:var(--accent3)}
+  .tt-topspeed{background:rgba(56,189,248,0.12);color:var(--accent4)}
+  .tt-warmup{background:rgba(255,255,255,0.06);color:var(--muted)}
+  .tt-prev{background:rgba(255,107,53,0.08);color:var(--accent3);border:1px solid rgba(255,107,53,0.25)}
+  .tt-rsa{background:rgba(255,107,53,0.12);color:var(--accent3)}
+  .tt-bounds{background:rgba(192,132,252,0.12);color:var(--accent5)}
+  .chevron{color:var(--muted);font-size:10px;transition:transform .2s}
+  .block-card.open .chevron{transform:rotate(180deg)}
+  .block-body{display:none;border-top:1px solid var(--border);padding:11px 13px}
+  .block-card.open .block-body{display:block}
+  .block-goal{font-size:12px;color:var(--muted);padding-left:9px;border-left:2px solid var(--accent);margin-bottom:10px;line-height:1.6}
+
+  /* DRILL TABLE */
+  .drill-table{width:100%;border-collapse:collapse;margin-top:7px;font-size:12px}
+  .drill-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:5px 7px;text-align:left;border-bottom:1px solid var(--border)}
+  .drill-table td{padding:6px 7px;border-bottom:1px solid rgba(42,45,53,0.5)}
+  .drill-table tr:last-child td{border-bottom:none}
+  .drill-table td:first-child{color:var(--text);font-weight:500}
+
+  /* DRILLS */
+  .drills{display:flex;flex-direction:column;gap:5px;margin-top:7px}
+  .drill{background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:6px;padding:8px 11px}
+  .drill.d-sprint{border-left:2px solid var(--accent)}
+  .drill.d-plyo{border-left:2px solid var(--accent2)}
+  .drill.d-cod{border-left:2px solid var(--accent3)}
+  .drill.d-topspeed{border-left:2px solid var(--accent4)}
+  .drill.d-prev{border-left:2px solid var(--accent3)}
+  .drill.d-bounds{border-left:2px solid var(--accent5)}
+  .drill-name{font-size:13px;font-weight:500;margin-bottom:2px}
+  .drill-detail{font-size:11px;color:var(--muted)}
+  .drill-cue{margin-top:4px;font-size:11px;color:var(--accent);font-style:italic}
+
+  /* SPRINT SEQUENCE VISUAL */
+  .sprint-seq{background:rgba(212,245,60,0.03);border:1px solid rgba(212,245,60,0.15);border-radius:7px;padding:10px 12px;margin:8px 0}
+  .sprint-seq-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:8px}
+  .sprint-blocks{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+  .sb{background:rgba(212,245,60,0.08);border:1px solid rgba(212,245,60,0.22);border-radius:5px;padding:5px 9px;text-align:center}
+  .sb-dist{font-family:var(--heading);font-size:18px;color:var(--accent);line-height:1}
+  .sb-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .sb-arrow{color:rgba(212,245,60,0.4);font-size:13px}
+  .sb.highlight{background:rgba(212,245,60,0.18);border-color:rgba(212,245,60,0.45)}
+  .sb.highlight .sb-dist{font-size:22px}
+
+  /* PLYO BLOCK VISUAL */
+  .plyo-seq{background:rgba(60,255,160,0.03);border:1px solid rgba(60,255,160,0.15);border-radius:7px;padding:10px 12px;margin:8px 0}
+  .plyo-seq-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent2);margin-bottom:8px}
+  .plyo-blocks{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+  .pb{background:rgba(60,255,160,0.08);border:1px solid rgba(60,255,160,0.2);border-radius:5px;padding:6px 10px;text-align:center;min-width:80px}
+  .pb-name{font-size:11px;font-weight:600;color:var(--accent2);margin-bottom:1px}
+  .pb-vol{font-size:10px;color:var(--muted)}
+  .pb-rest{font-size:9px;color:rgba(60,255,160,0.45);margin-top:2px}
+  .pb-arrow{color:rgba(60,255,160,0.3);font-size:13px}
+
+  /* COD VISUAL */
+  .cod-wrap{background:rgba(255,107,53,0.04);border:1px solid rgba(255,107,53,0.15);border-radius:7px;padding:10px 12px;margin:8px 0}
+  .cod-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent3);margin-bottom:8px}
+  .cod-seq{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+  .cb{background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:5px;padding:5px 9px;text-align:center}
+  .cb-dist{font-family:var(--heading);font-size:16px;color:var(--accent3);line-height:1}
+  .cb-dir{font-size:9px;color:var(--muted)}
+  .cb-arrow{color:rgba(255,107,53,0.4);font-size:13px}
+
+  /* RSA PARAMS */
+  .rsa-params{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px}
+  .rsa-p{background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);border-radius:6px;padding:6px 7px;text-align:center}
+  .rsa-p-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+  .rsa-p-val{font-family:var(--heading);font-size:15px;color:var(--accent3);line-height:1}
+
+  /* ALERT BOX */
+  .alert{background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.25);border-left:3px solid var(--accent3);border-radius:7px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--muted);line-height:1.6}
+  .alert b{color:var(--accent3)}
+  .alert-green{background:rgba(60,255,160,0.04);border:1px solid rgba(60,255,160,0.2);border-left:3px solid var(--accent2)}
+  .alert-green b{color:var(--accent2)}
+  .alert-blue{background:rgba(56,189,248,0.04);border:1px solid rgba(56,189,248,0.2);border-left:3px solid var(--accent4)}
+  .alert-blue b{color:var(--accent4)}
+
+  .note-box{background:rgba(212,245,60,0.04);border:1px solid rgba(212,245,60,0.12);border-radius:6px;padding:8px 11px;font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .note-box b{color:var(--accent)}
+
+  /* FERIEN / SPECIAL SCREENS */
+  .ferien-screen{text-align:center;padding:30px 20px}
+  .ferien-screen .big-icon{font-size:56px;margin-bottom:14px}
+  .ferien-screen h2{font-family:var(--heading);font-size:36px;letter-spacing:.03em;color:var(--accent2);margin-bottom:8px}
+  .ferien-screen p{font-size:13px;color:var(--muted);max-width:400px;margin:0 auto 20px;line-height:1.7}
+  .ferien-rules{display:flex;flex-direction:column;gap:7px;text-align:left;max-width:420px;margin:0 auto}
+  .rule{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:12px;display:flex;gap:10px;align-items:flex-start}
+  .rule-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+  .rule-text{color:var(--muted);line-height:1.6}
+  .rule-text b{color:var(--text)}
+  .rule.red{border-color:rgba(255,107,53,0.3);background:rgba(255,107,53,0.04)}
+  .rule.green{border-color:rgba(60,255,160,0.2);background:rgba(60,255,160,0.03)}
+
+  .footer{border-top:1px solid var(--border);margin-top:28px;padding:13px 16px;text-align:center}
+  .footer p{font-size:11px;color:var(--muted)}
+  .footer span{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">RH Applied Performance</div>
+  <h1>LUC GIGON<br><span>SPEED PROGRAMM</span></h1>
+  <div class="hero-sub">2× Sprint/Woche (Mi + Sa) · RSA Top-Up (Di + Fr nach Training) · Footuro U17/U18 · MZ</div>
+  <div class="hero-meta">
+    <div class="hero-pill"><div class="dot"></div><b>09.06 – 26.07.2026</b></div>
+    <div class="hero-pill"><div class="dot"></div>Mi: Sprint Session</div>
+    <div class="hero-pill"><div class="dot"></div>Sa: Sprint Session</div>
+    <div class="hero-pill"><div class="dot"></div>Di/Fr: RSA Top-Up</div>
+    <div class="hero-pill"><div class="dot"></div>Ferien: 05.07–19.07</div>
+  </div>
+</div>
+
+<div class="profile-bar">
+  <div class="prof-item"><b>17.3 J.</b> | MZ</div>
+  <div class="prof-item">10m: <b>1.82s</b></div>
+  <div class="prof-item">40m: <b>5.43s</b></div>
+  <div class="prof-item">Drop Jump RI2: <b>41.4</b></div>
+  <span class="prof-badge pb-good">Antritt 74.Pzt ↑</span>
+  <span class="prof-badge pb-warn">CoD 33.Pzt ↓</span>
+  <span class="prof-badge pb-weak">Topspeed 33.Pzt</span>
+  <span class="prof-badge" style="background:rgba(255,107,53,0.1);color:var(--accent3);border:1px solid rgba(255,107,53,0.25)">⚠ Leiste li. Feb 26</span>
+</div>
+
+<div class="container">
+  <div class="week-tabs" id="week-tabs">
+    <div class="week-tab active" onclick="setWeek(1)">WOCHE 1<span class="wk-dates">09 – 14.06</span></div>
+    <div class="week-tab" onclick="setWeek(2)">WOCHE 2<span class="wk-dates">16 – 21.06</span></div>
+    <div class="week-tab" onclick="setWeek(3)">WOCHE 3<span class="wk-dates">23 – 28.06</span></div>
+    <div class="week-tab" onclick="setWeek(4)">WOCHE 4<span class="wk-dates">30.06 – 05.07</span></div>
+    <div class="week-tab ferien" onclick="setWeek(5)">FERIEN<span class="wk-dates">06.07 – 19.07</span></div>
+    <div class="week-tab restart" onclick="setWeek(6)">RESTART<span class="wk-dates">20 – 26.07</span></div>
+    <div class="week-tab glossar" onclick="setWeek(7)">GLOSSAR<span class="wk-dates">Drill-Bibliothek</span></div>
+  </div>
+
+  <div class="week-prog">
+    <div class="wp-top"><span>Belastungsprogression</span><span id="prog-label">Einstieg — Antritt + Reaktivkraft</span></div>
+    <div class="wp-bar"><div class="wp-fill" id="prog-fill" style="width:15%"></div></div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent)"></div>Sprint Session</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent2)"></div>Plyometrie / Bounds</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent3)"></div>RSA / CoD</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent4)"></div>Topspeed</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--accent5)"></div>Prävention</div>
+  </div>
+
+  <div class="day-strip" id="day-strip"></div>
+  <div id="session-container"></div>
+
+  <div class="footer"><p><span>RH Applied Performance GmbH</span> · Raphael Hügli MSc · rhappliedperformance.ch</p></div>
+</div>
+
+<script>
+
+// ─── HTML HELPERS ─────────────────────────────────────────────────────────────
+
+function rsaHTML(sets, reps, sprintDur, rest, setRest, format) {
+  return `<div class="rsa-params">
+    <div class="rsa-p"><div class="rsa-p-label">Sprint</div><div class="rsa-p-val">${sprintDur}</div></div>
+    <div class="rsa-p"><div class="rsa-p-label">Pause</div><div class="rsa-p-val">${rest}</div></div>
+    <div class="rsa-p"><div class="rsa-p-label">Sets×Reps</div><div class="rsa-p-val">${sets}×${reps}</div></div>
+    <div class="rsa-p"><div class="rsa-p-label">Set-Rest</div><div class="rsa-p-val">${setRest}</div></div>
+  </div><div style="font-size:11px;color:var(--accent3);margin-bottom:9px">Format: ${format}</div>`;
+}
+
+function sprintSeqHTML(items, note) {
+  const blocks = items.map(it => {
+    const hl = it.highlight ? ' highlight' : '';
+    return `<div class="sb${hl}"><div class="sb-dist">${it.dist}</div><div class="sb-label">${it.label||''}</div></div>`;
+  }).join('<span class="sb-arrow">→</span>');
+  return `<div class="sprint-seq">
+    <div class="sprint-seq-title">⚡ Sprint Sequenz</div>
+    <div class="sprint-blocks">${blocks}</div>
+    ${note ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">${note}</div>` : ''}
+  </div>`;
+}
+
+function plyoHTML(items) {
+  const blocks = items.map((it,i) =>
+    (i > 0 ? '<span class="pb-arrow">→</span>' : '') +
+    `<div class="pb"><div class="pb-name">${it.name}</div><div class="pb-vol">${it.vol}</div><div class="pb-rest">${it.rest||''}</div></div>`
+  ).join('');
+  return `<div class="plyo-seq"><div class="plyo-seq-title">⚡ Plyometrie-Progression</div><div class="plyo-blocks">${blocks}</div></div>`;
+}
+
+function codHTML(title, items, note) {
+  const blocks = items.map((it,i) =>
+    (i > 0 ? `<span class="cb-arrow">▶</span>` : '') +
+    `<div class="cb"><div class="cb-dist">${it.dist}</div><div class="cb-dir">${it.dir||''}</div></div>`
+  ).join('');
+  return `<div class="cod-wrap"><div class="cod-title">⚡ ${title}</div><div class="cod-seq">${blocks}</div>${note?`<div style="font-size:11px;color:var(--muted);margin-top:7px">${note}</div>`:''}</div>`;
+}
+
+function drillsHTML(items) {
+  return '<div class="drills">' + items.map(d =>
+    `<div class="drill d-${d.type||'sprint'}">
+      <div class="drill-name">${d.name}</div>
+      <div class="drill-detail">${d.detail}</div>
+      ${d.cue ? `<div class="drill-cue">💬 ${d.cue}</div>` : ''}
+    </div>`
+  ).join('') + '</div>';
+}
+
+function tblHTML(rows) {
+  const head = rows[0].map(h => `<th>${h}</th>`).join('');
+  const body = rows.slice(1).map(r => '<tr>' + r.map(c => `<td>${c}</td>`).join('') + '</tr>').join('');
+  return `<table class="drill-table"><tr>${head}</tr>${body}</table>`;
+}
+
+// ─── WARM-UP (standard) ───────────────────────────────────────────────────────
+
+function warmupBody(focus) {
+  const isCoD = focus === 'cod';
+  const isTopSpeed = focus === 'topspeed';
+  return `
+  <div class="alert alert-blue"><b>Pflicht vor JEDEM Sprint-Block.</b> Kein Sprint ohne vollständiges Warm-Up. Dauer: ~18 Min.</div>
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:10px 0 6px">Phase 1 — Pre-Aktivierung (5 Min)</div>
+  ${tblHTML([
+    ['Übung','Vol.','Fokus'],
+    ['Handwalks (Inchworm)','2×8','Schulterblatt stabil'],
+    ['Ausfallschritt mit Rotation','2×8 je','Hüfte öffnen, BWS rotieren'],
+    ['Unilat. Glute Bridge','2×10 je','Gluteus + Hamstring'],
+    ['Bear Crawl','2×10m','Rumpfstabilität'],
+    ['Side-Lying Hip Abduction','2×12 je','Gluteus med. – CoD-Prävention'],
+  ])}
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:12px 0 6px">Phase 2 — Lauf-ABC (6 Min)</div>
+  ${tblHTML([
+    ['Drill','Vol.','Technischer Fokus'],
+    ['A-March','2×15m','Knie auf Hüfthöhe, Arm-Opposition'],
+    ['A-Skip','2×15m','Federnde Abdruckkraft, Frequenz'],
+    ['B-Skip','2×15m','Pawing-Mechanik, Fuss unter Hüfte'],
+    ['B-Run','2×15m','Aktiver Bodenkontakt, Hüftextension'],
+    [isCoD ? 'Lateral Shuffle' : isTopSpeed ? 'Carioca' : 'Ankling (Low A-Skip)', '2×15m je', isCoD ? 'CoD-Vorbereitung lateral' : isTopSpeed ? 'Hüftmobilität + Frequenz' : 'Sprunggelenk-Steifigkeit'],
+    [isCoD ? 'Scissors / Schere' : 'Scissors / Schere','2×15m','Hüftbeuger-Aktivierung, Kniehebe-Frequenz'],
+  ])}
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:12px 0 6px">Phase 3 — Sprint-Vorbereitung & Potenzierung (7 Min)</div>
+  ${drillsHTML([
+    {type:'sprint',name:'Power Skip for Height (2×15m)',detail:'Maximaler vertikaler Absprung, Knie hoch, Arm explosiv rauf',cue:'Vertikale Kraftentwicklung → Topspeed-Transfer'},
+    {type:'sprint',name:'Power Skip for Distance (2×15m)',detail:'Maximaler horizontaler Absprung, Körper vorwärts projizieren',cue:'Horizontale Kraft → Beschleunigung'},
+    {type:'sprint',name:'Steigerungsläufe 40m (2×)',detail:'Start locker 60% → smooth steigern auf 85–95% → auslaufen'},
+    {type:'sprint',name:'Steigerungslauf mit Sprint-Finish (2×30m)',detail:'Letzten 10m auf 100% → CNS bereit',cue:'ZNS-Priming: nach letztem Steigerungslauf sofort in Hauptblock'},
+  ])}`;
+}
+
+// ─── PRÄVENTION (obligatorisch) ───────────────────────────────────────────────
+
+function prevBody(copHold) {
+  return `
+  <div class="alert"><b>⚠ Obligatorisch nach JEDER Session.</b> Leistenhistorie Feb 2026 — keine Ausnahmen.</div>
+  ${tblHTML([
+    ['Übung','Vol.','Begründung'],
+    [`Copenhagen Adductor Plank`,`3×${copHold}s je Seite`,'OBLIGATORISCH – Leistenprävention'],
+    ['Nordic Hamstring Curl (eccentrisch, langsam)','3×5','Hamstring-Robustheit Topspeed-Phase'],
+  ])}`;
+}
+
+// ─── SESSION DATA ─────────────────────────────────────────────────────────────
+
+const SESSIONS = {
+
+  // ═══ WOCHE 1 ═══
+
+  "1_mi": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 1 — ACCELERATION",
+    sub:"Eigenständige Einheit · 11.06", dur:"~60 Min", int:"Hoch", focus:"Antritt 0–20m + Reaktivkraft Einstieg",
+    note:"<b>WK1 Mittwoch:</b> Erster Sprint-Tag. Fokus auf Antritt (Lucs Stärke – weiter ausbauen) und Reaktivkraft-Einstieg (Sprunggelenk-Steifigkeit). Kein Topspeed-Block in WK1.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"Standard Linear · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        goal:"Nervensystem und Bewegungsapparat vorbereiten. Nie überspringen.",
+        body: warmupBody('linear') },
+      { num:"02", title:"Reaktivkraft-Plyos — Block A", sub:"Fussgelenk-Steifigkeit · ~10 Min", tag:"tt-plyo", tagLabel:"Plyos",
+        goal:"Sprunggelenk-Reaktivkraft als Grundlage für Topspeed. Kontaktzeit ist das primäre Ziel – nicht die Höhe.",
+        body: plyoHTML([
+          {name:"Pogo Jump bilateral",vol:"3×10",rest:"45s Pause"},
+          {name:"Ankle Jump einbeinig alt.",vol:"3×8 je",rest:"45s Pause"},
+          {name:"Broad Jump bilateral → sofort 3. Schritt Sprint",vol:"3×3",rest:"60s Pause"},
+        ]) + drillsHTML([
+          {type:'plyo',name:'Cue Pogo: Knie fast gestreckt, Push vom Ballen, Federung rein',detail:'Höhe ist NICHT das Ziel. Kurze Bodenkontaktzeit = richtig.',cue:'Stell dir vor der Boden ist heiss.'},
+          {type:'plyo',name:'Broad Jump → Sprint: horizontale Kraft direkt in Sprint transferieren',detail:'Nach Landung sofort 3 explosive Sprint-Schritte'},
+        ]) },
+      { num:"03", title:"Sprint-Block — Acceleration 0–20m", sub:"6 Sprint-Typen · ~25 Min", tag:"tt-sprint", tagLabel:"Sprint",
+        goal:"Antritt von verschiedenen Startpositionen. Resisted Sprint für horizontalen Kraftimpuls (bereits WK1 nachgewiesen wirksam).",
+        body: tblHTML([
+          ['Vol.','Startposition','Distanz','Rest','Coaching-Cue'],
+          ['3×','Ausfallschritt Knie am Boden','5m','30s','Erster Schritt explosiv – Knie pushen'],
+          ['3×','Liegeposition (Prone Go)','10m','60s','Schnelle Aufrichtung, anterior lean halten'],
+          ['2×','Seitlich (lateral start)','15m','90s','Crossover Schritt → Sprint, Körperdruck anterior'],
+          ['2×','Resisted Sprint (Band/Schlitten ~10% Vreduktion)','15m','2min','Horizontaler Druck, kein Aufrechten'],
+          ['2×','Floating: Jog→Sprint→Jog 10-15-10-15m','50m total','2min','Nahtloser Übergang, Frequenz vor Strecke'],
+        ]) },
+      { num:"04", title:"Prävention — Obligatorisch", sub:"8 Min · nach Sprint", tag:"tt-prev", tagLabel:"Prävention",
+        goal:"Leistenprävention. Hamstring-Robustheit für Topspeed-Phase aufbauen.",
+        body: prevBody(20) },
+    ]
+  },
+
+  "1_sa": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 2 — TOPSPEED INTRO + COD",
+    sub:"Eigenständige Einheit · 14.06", dur:"~60 Min", int:"Hoch", focus:"Topspeed-Mechanik · CoD Intro · Lateral Reaktivkraft",
+    note:"<b>WK1 Samstag:</b> Zweiter Sprint-Tag. Flying Sprints für Topspeed-Exposure. T-Drill + 45°-Cut als CoD-Einstieg. Lateral Bounds neu.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"CoD-Fokus · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        goal:"Erweitert mit Lateral Shuffle und Scissors für CoD-Vorbereitung.",
+        body: warmupBody('cod') },
+      { num:"02", title:"Reaktivkraft-Plyos — Block B", sub:"Lateral Reaktivkraft · ~10 Min", tag:"tt-plyo", tagLabel:"Plyos",
+        goal:"Laterale Steifigkeit → CoD-Bremskraft. Single-Leg Bounds auf Höhe und Weite.",
+        body: plyoHTML([
+          {name:"Lateral Pogo einbeinig",vol:"3×8 je",rest:"45s"},
+          {name:"SL Bound auf Höhe",vol:"3×5 je",rest:"60s"},
+          {name:"SL Bound auf Weite",vol:"3×5 je",rest:"60s"},
+          {name:"Box Depth Jump 30cm",vol:"3×5",rest:"60s"},
+        ]) + drillsHTML([
+          {type:'plyo',name:'SL Bound Höhe: maximale vertikale Projektion, Knie zur Brust',detail:'Einbeinig abspringen, gleiches Bein landen, sofort nächster',cue:'Vertikale Kraft → Topspeed-Transfer'},
+          {type:'plyo',name:'SL Bound Weite: maximale horizontale Projektion',detail:'Horizontale Kraft direkt → Schrittlänge in Sprintphase',cue:'Horizontal ist Fussball-Realität'},
+          {type:'plyo',name:'Drop Jump: Kontaktzeit < 0.15s Ziel (aktuell 0.155s)',detail:'Von 30cm Box fallen (nicht abspringen!) → sofort Max Rebound'},
+        ]) },
+      { num:"03", title:"Sprint-Block — Topspeed + CoD", sub:"Flying Sprints + T-Drill · ~25 Min", tag:"tt-topspeed", tagLabel:"Topspeed",
+        goal:"Flying Sprints für Topspeed-Mechanik. CoD als Einstieg – Qualität über Tempo.",
+        body: tblHTML([
+          ['Vol.','Typ','Distanz','Rest','Fokus'],
+          ['2×','Steigerungslauf → Flying Sprint','build 20m → 15m Sprint','90s','Topspeed-Mechanik, Pawing'],
+          ['2×','In-and-Out Sprint','10–20m','2min','Velocity Maintenance'],
+          ['3× je Seite','T-Drill','–','40s','Qualität: Bremsen + Richtungswechsel'],
+          ['3× je Seite','45°-Cut Sprint (kontrolliert)','15m','40s','Harter Cut, exzentrische Bremskraft'],
+        ]) + codHTML('T-Drill Sequenz',
+          [{dist:'5m',dir:'→ Sprint'},{dist:'5m',dir:'← links'},{dist:'5m',dir:'→ rechts'},{dist:'5m',dir:'↑ zurück'}],
+          '4 Stangen · Qualität Bremsen und Richtungswechsel vor Tempo') },
+      { num:"04", title:"Prävention — Obligatorisch", sub:"8 Min", tag:"tt-prev", tagLabel:"Prävention",
+        goal:"Adduktoren-Robustheit + Hamstring nach CoD-Belastung.",
+        body: prevBody(20) },
+    ]
+  },
+
+  "1_topup": {
+    icon:"🔁", iconCls:"si-rsa", title:"RSA TOP-UP — WOCHE 1",
+    sub:"Nach Teamtraining · Di 10.06 + Fr 13.06 · je ~15 Min", dur:"~15 Min je", int:"Mittel-Hoch", focus:"Linear (Di) · Stop-and-Go (Fr)",
+    note:"<b>RSA Top-Up WK1:</b> Nur nach normalem Teamtraining (<85 Min intensiv). Bei hoher Belastung → weglassen. 5 Min Easy Jog als Übergang immer.",
+    blocks:[
+      { num:"01", title:"RSA Dienstag — Linear", sub:"2×5 @ 4s Sprint / 32s Pause", tag:"tt-rsa", tagLabel:"RSA",
+        goal:"Einstieg RSA linear. Niedriges Volumen, volle Sprintqualität.",
+        body: rsaHTML(2,5,'4s','32s','1:30 min','Linear') + drillsHTML([
+          {type:'cod',name:'Maximale Qualität über alle 10 Sprints',detail:'2×5 = 10 Sprints Total | 1:8 Verhältnis Sprint:Pause',cue:'Sprint 10 muss selbe Qualität haben wie Sprint 1'},
+        ]) },
+      { num:"02", title:"RSA Freitag — Stop-and-Go", sub:"2×5 @ 4s Sprint / 32s Pause", tag:"tt-rsa", tagLabel:"RSA CoD",
+        goal:"CoD-Format direkt auf Sprinttraining Mittwoch und Samstag aufbauen.",
+        body: rsaHTML(2,5,'4s','32s','1:30 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint'},{dist:'Stop',dir:'Wende'},{dist:'10m',dir:'← Sprint'},{dist:'Stop',dir:'Wende'},{dist:'5m',dir:'→ Finish'}],
+          '<b>Startmitte:</b> 5m rechts sprinten → harter Stopp → 10m links sprinten → harter Stopp → 5m zurück zur Mitte. 20m Total pro Rep. Die 4s = 1 komplette Rep.') },
+    ]
+  },
+
+  // ═══ WOCHE 2 ═══
+
+  "2_mi": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 3 — TOPSPEED MECHANIK",
+    sub:"Eigenständige Einheit · 18.06", dur:"~60 Min", int:"Hoch", focus:"Topspeed-Phase + Hurdle Hops + Bounds-Progression",
+    note:"<b>WK2 Mittwoch:</b> Topspeed-Schwerpunkt. In-and-Out, Hollow Sprint neu. Hurdle Hops +10 Reps vs WK1. Alternate-Leg Bounds erstmals eingeführt.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"Topspeed-Fokus · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        goal:"Mit Topspeed-Priming: letzter Warm-Up Step ist Flying Sprint 20m build → 15m Max.",
+        body: warmupBody('topspeed') },
+      { num:"02", title:"Reaktivkraft-Plyos — Block C", sub:"SSC Vertikal + Hurdles + Bounds · ~12 Min", tag:"tt-plyo", tagLabel:"Plyos",
+        goal:"Hurdle Hops als neues Stimulus. Alternate-Leg Bounds (Laufsprünge) direkt auf Schrittlänge-Defizit adressieren.",
+        body: plyoHTML([
+          {name:"Pogo bilateral",vol:"3×12",rest:"45s"},
+          {name:"Hürden (klein) Hop 20cm bilateral",vol:"3×6",rest:"60s"},
+          {name:"Alt-Leg Bound auf Weite",vol:"3×4 Schritte",rest:"75s"},
+          {name:"Alt-Leg Bound auf Höhe",vol:"3×4 Schritte",rest:"75s"},
+        ]) + drillsHTML([
+          {type:'plyo',name:'Alternate-Leg Bound auf WEITE: Laufsprünge maximal weit',detail:'L→R Abwechslung, jeder Schritt = maximaler Weitsprung-Absprung. 4 Bounding-Schritte consecutiv.',cue:'Direkter Transfer auf Schrittlänge 10–30m (Lucs Schwäche!)'},
+          {type:'plyo',name:'Alternate-Leg Bound auf HÖHE: Laufsprünge maximal hoch',detail:'Gleich wie Weite aber Fokus auf maximale vertikale Höhe pro Schritt, Knie zur Brust.',cue:'Vertikale Kraft im Sprintschritt → Topspeed-Transfer'},
+          {type:'plyo',name:'Hürden Hop 20cm: reaktiv über kleine Hürden (Marker/Stangen genügen)',detail:'Kein Einsinken beim Landing. Sofort nächster Hop. Denke: Boden ist heiss.'},
+          {type:'plyo',name:'SL Bound auf Weite: einbeinige Hops links-links-links (3 konsekutiv), dann rechts-rechts-rechts',detail:'Immer gleiches Bein: 3 Hops so weit wie möglich. Fokus horizontale Kraft.',cue:'Transfer auf Schrittlänge 10–30m (Lucs Hauptdefizit!)'},
+        ]) },
+      { num:"03", title:"Sprint-Block — Topspeed Phase", sub:"Flying Sprints + In-and-Out + Hollow · ~25 Min", tag:"tt-topspeed", tagLabel:"Topspeed",
+        goal:"Maximum Velocity Exposure. Hollow Sprint für Jog→Sprint Transition-Mechanik (direkt auf Schrittlängen-Defizit ab 10m).",
+        body: tblHTML([
+          ['Vol.','Typ','Distanz','Rest','Fokus'],
+          ['3×','Flying Sprint (20m Anlauf → Max)','20m Sprint','2min','Maximale Geschwindigkeit, Pawing-Mechanik'],
+          ['2×','In-and-Out Sprint','10–20–10m','2min','Velocity Maintenance, Frequenz-Kontrolle'],
+          ['2×','Hill Sprint / leichte Steigung oder Widerstandsband','30m','2–3min','Horizontaler Kraftimpuls, anterior lean'],
+          ['1×','Hollow Sprint 10-20-10-20m','60m total','2min','Jog→Sprint Transition smooth'],
+        ]) + sprintSeqHTML([
+          {dist:'10m',label:'Jog'},{dist:'20m',label:'SPRINT',highlight:true},{dist:'10m',label:'Jog'},{dist:'20m',label:'SPRINT',highlight:true}
+        ],'Hollow Sprint: smooth transition → nicht abrempeln') },
+      { num:"04", title:"Prävention", sub:"8 Min", tag:"tt-prev", tagLabel:"Prävention",
+        goal:"Progression: Copenhagen jetzt 3×25s.",
+        body: prevBody(25) },
+    ]
+  },
+
+  "2_sa": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 4 — COD INTENSIVIERUNG",
+    sub:"Eigenständige Einheit · 21.06", dur:"~60 Min", int:"Hoch", focus:"CoD Intensiv + Lateral Bounds + RSA-Element",
+    note:"<b>WK2 Samstag:</b> CoD-Schwerpunkt. Hop & Hard Stop + Skater Jumps als Bremskapazitäts-Training. RSA-Element 5-10-5 Format erstmals.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"CoD-Fokus · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('cod'), goal:"CoD-spezifische Vorbereitung mit Lateral Shuffle, Scissors, Backpedal→Sprint." },
+      { num:"02", title:"Reaktivkraft-Plyos — Block D", sub:"CoD-spezifisch + Lateral Bounds · ~10 Min", tag:"tt-plyo", tagLabel:"Plyos",
+        goal:"Exzentrische Bremskapazität lateral aufbauen. Direkter Transfer auf Stop-and-Go.",
+        body: plyoHTML([
+          {name:"Lateral Bound bilateral",vol:"3×5 je",rest:"45s"},
+          {name:"Hop & Hard Stop",vol:"3×6 je",rest:"45s"},
+          {name:"Skater Jump reaktiv",vol:"3×8 je",rest:"45s"},
+        ]) + drillsHTML([
+          {type:'bounds',name:'Lateral Bound bilateral: so weit wie möglich lateral springen und landen',detail:'Mit beiden Beinen seitlich springen → StickLanding → Stabilität checken',cue:'Laterale exzentrische Bremskraft → Stop-and-Go-Transfer'},
+          {type:'bounds',name:'Hop & Hard Stop: 3–5m einbeinig → abrupter Stopp',detail:'Einbeinig springen → harter athletischer Stopp. Kontroll-Landing.',cue:'Exzentrische Bremskapazität: was Luc braucht für CoD-Verbesserung'},
+          {type:'bounds',name:'Skater Jump: lateraler einbeiniger Sprung – reaktiv zurück',detail:'Push off rechts → land links → sofort reaktiv zurück. Minimal pause.',cue:'Richtungswechsel + Steifigkeit lateral'},
+        ]) },
+      { num:"03", title:"Sprint-Block — CoD + RSA-Element", sub:"5-10-5 + RSA CoD · ~25 Min", tag:"tt-cod", tagLabel:"CoD + RSA",
+        goal:"Stop-and-Go Mechanik. RSA unter Richtungswechsel – direkt auf Schwäche (33. Pzt. Stop-and-Go).",
+        body: tblHTML([
+          ['Vol.','Typ','Rest','Fokus'],
+          ['3× je Seite','T-Drill','35s','Qualität Bremsen + Antritt'],
+          ['4× je Seite','5–10–5 Drill','35s','Stop-and-Go Mechanik direkt'],
+          ['2×5','RSA 4s Sprint | 20s Pause (CoD-Format)','2min Set-Rest','RSA unter Richtungswechsel'],
+        ]) + codHTML('5-10-5 Stop & Go — Drill Aufbau',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          '<b>Start Mitte:</b> Sprint 5m rechts → harter Stopp (Aussenbein bremst) → Sprint 10m links → harter Stopp → Sprint 5m zurück zur Mitte. 20m Total. 35s aktive Pause zwischen Reps.') },
+      { num:"04", title:"Prävention", sub:"8 Min", tag:"tt-prev", tagLabel:"Prävention",
+        body: prevBody(25), goal:"Copenhagen + Side-Lying Hip Abduction nach CoD-Belastung." },
+    ]
+  },
+
+  "2_topup": {
+    icon:"🔁", iconCls:"si-rsa", title:"RSA TOP-UP — WOCHE 2",
+    sub:"Nach Teamtraining · Di 17.06 + Fr 20.06 · je ~15 Min", dur:"~15 Min je", int:"Mittel-Hoch", focus:"Linear (Di) · CoD dichter (Fr)",
+    note:"<b>RSA Top-Up WK2:</b> Identisch WK1 in Volumen. Freitag: Pause auf 25s verkürzt (erhöhte Dichte) sofern Qualität WK1 gehalten.",
+    blocks:[
+      { num:"01", title:"RSA Dienstag — Linear", sub:"2×5 @ 4s / 32s", tag:"tt-rsa", tagLabel:"RSA",
+        goal:"Gleich wie WK1 – Qualitätskontrolle: ist Sprint 10 noch gleich gut wie Sprint 1?",
+        body: rsaHTML(2,5,'4s','32s','1:30 min','Linear') },
+      { num:"02", title:"RSA Freitag — CoD Dichter", sub:"2×5 @ 4s / 25s (Progression!)", tag:"tt-rsa", tagLabel:"RSA CoD",
+        goal:"Progression: 32s → 25s Pause. Erhöhte Dichte nur wenn WK1 Qualität erhalten.",
+        body: rsaHTML(2,5,'4s','25s','1:30 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          'Start Mitte · 20m Total · 25s aktive Pause (erhöhte Dichte vs WK1)') + `<div class="alert"><b>Progression:</b> Nur wenn Sprintqualität WK1 Freitag gut war. Sonst bei 32s bleiben.</div>` },
+    ]
+  },
+
+  // ═══ WOCHE 3 ═══
+
+  "3_mi": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 5 — REAKTIVKRAFT HAUPTBLOCK",
+    sub:"Eigenständige Einheit · 25.06", dur:"~65 Min", int:"Maximal", focus:"Drop Jump Hauptblock + Bounds-Vollprogression + Resisted Sprint",
+    note:"<b>WK3 Mittwoch:</b> Intensivster Plyo-Tag. Drop Jump RI2 Ziel: >47 (war 41.4 im April). Alternate-Leg Bounds auf Maximum. Resisted Sprint + Transfer-Sprint Kombination.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"Standard + Flying Sprint Priming · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('linear'), goal:"Standard plus Flying Sprint als letzter Potenzierungs-Schritt." },
+      { num:"02", title:"Reaktivkraft-Plyos — Block E (HAUPTBLOCK)", sub:"Drop Jump + Bounds-Vollprogression · ~15 Min", tag:"tt-plyo", tagLabel:"Plyos WK3",
+        goal:"RI2 Ziel: von 41.4 auf >47. Alle Bound-Variationen. Staircase Hop neu. Transfer-Sprint nach Plyo.",
+        body: `<div class="alert" style="background:rgba(192,132,252,0.05);border-color:rgba(192,132,252,0.25);border-left-color:var(--accent5)"><b style="color:var(--accent5)">Drop Jump RI2 Ziel:</b> April = 41.4 | Kaderschnitt gut = 52.6 | Ziel WK3: >47. Kontaktzeit priorisieren. BKZ < 0.15s = richtig.</div>` +
+        tblHTML([
+          ['Übung','Sets×Reps','Rest','Primärziel'],
+          ['Drop Jump 40cm → sofort Max Rebound','4×5','75s','RI2 ↑, BKZ < 0.15s'],
+          ['Hurdle Hop 50cm bilateral (+10cm vs WK2)','3×6','60s','Reaktiv, höheres Stimulus'],
+          ['Alt-Leg Bound auf Weite (4 Schritte)','3×4','75s','Schrittlänge direkt'],
+          ['Alt-Leg Bound auf Höhe (4 Schritte)','3×4','75s','Vertikale Kraft Sprintschritt'],
+          ['Hop 2er-Schritt → sofort Sprint 10m','3×6 Schritte+Sprint','75s','Transfer Plyo → Sprint'],
+        ]) + drillsHTML([
+          {type:'plyo',name:'Hop 2er-Schritt: beidbeinige Hops mit je 2 Schritt Rhythmus (kurze BKZ, Hüftextension)',detail:'Hüftdominant + sprunggelenksdominant kombiniert. An Treppen, Hügel oder auf Boden möglich.',cue:'Transfer-Sprint nach 6 Hops sofort: maximale Explosivität'},
+        ]) },
+      { num:"03", title:"Sprint-Block — Resisted + Free + Curved", sub:"PAP-Kombination · ~20 Min", tag:"tt-sprint", tagLabel:"Sprint WK3",
+        goal:"Post-Activation Potentiation: Resisted Sprint → sofort Free Sprint. Curved Sprint für Fussball-Transfer.",
+        body: tblHTML([
+          ['Vol.','Typ','Distanz','Rest','Fokus'],
+          ['2×','Resisted Sprint (Schlitten/Band ~10%)','15m','2–3min','Horizontaler Kraftimpuls'],
+          ['3×','Freier Sprint sofort nach Resisted','20m','2min','PAP Transfer-Sprint'],
+          ['2×','Curved Sprint (Kurve re/li)','30m','2–3min','Fussball-Realität, Zentrifugalkraft'],
+          ['1×','Hollow Sprint 10-20-10-20m','60m total','2min','Frequenz + Transition'],
+        ]) },
+      { num:"04", title:"Prävention", sub:"8 Min", tag:"tt-prev", tagLabel:"Prävention",
+        body: prevBody(25), goal:"Obligatorisch. Nach schwerem Plyo-Block wichtig." },
+    ]
+  },
+
+  "3_sa": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 6 — COD MASTERBLOCK + RSA",
+    sub:"Eigenständige Einheit · 28.06", dur:"~60 Min", int:"Maximal", focus:"Reaktive CoD-Plyos + RSA erhöhte Dichte (1:4)",
+    note:"<b>WK3 Samstag:</b> Peak-Session CoD. Reactive Drop Step erstmals. RSA 4s | 16s (erhöhte Dichte 1:4). Offensiv-Sprint mit Abschluss für Spieltransfer.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"CoD-Fokus · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('cod'), goal:"Lateral-fokussiert. Reactive Signal-Drills (Handzeichen → Richtung) am Ende." },
+      { num:"02", title:"Reaktivkraft-Plyos — Block F", sub:"Reaktive CoD-Plyos · ~10 Min", tag:"tt-plyo", tagLabel:"Plyos CoD",
+        goal:"Reaktive CoD-Plyos höchste Komplexität. Skater Jump → sofort Sprint kombiniert.",
+        body: tblHTML([
+          ['Übung','Sets×Reps','Rest','Primärziel'],
+          ['Lateral Band Walk + reaktiver Schnellschritt','3×10m','30s','Gluteus med. CoD-Aktivierung'],
+          ['Skater Jump → sofort Sprint 10m','4× je Seite','45s','Richtungswechsel + explosiver Antritt'],
+          ['Alt-Leg Lateral Bound → Sprint','3×3 je + Sprint','60s','Laterale Kraft → linearer Sprint-Transfer'],
+          ['Reactive Drop Step (visueller Stimulus → Richtung)','3×6 je','45s','Wahrnehmung + reaktive Bewegung'],
+        ]) },
+      { num:"03", title:"CoD Sprint + RSA Peak-Block", sub:"RSA 4s | 16s (1:4 Dichte) · ~25 Min", tag:"tt-cod", tagLabel:"CoD + RSA Peak",
+        goal:"Höchste RSA-Dichte des Blocks. Offensiv-Sprint spielnah.",
+        body: tblHTML([
+          ['Vol.','Typ','Rest','Fokus'],
+          ['3× je Seite','5–10–5 Drill','35s','Stop-and-Go Qualität'],
+          ['2× je','Offensiv-Sprint mit Abschluss (spielnah 20–30m)','40s','Spieltransfer'],
+          ['3×5','RSA 4s | 16s Pause (1:4 – erhöhte Dichte!)','2min Set','RSA-Kapazität unter Ermüdung'],
+        ]) + rsaHTML(3,5,'4s','16s','2 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          'Start Mitte · 20m Total · 16s Pause = erhöhte Dichte 1:4') +
+        `<div class="alert"><b>1:4 Dichte:</b> Härtestes RSA-Protokoll des Blocks. Qualitätskontrolle: Sprint 15 noch explosiv? → Programm erfolgreich.</div>` },
+      { num:"04", title:"Prävention", sub:"8 Min", tag:"tt-prev", tagLabel:"Prävention",
+        body: prevBody(25), goal:"Peak-Session abschliessen. Copenhagen obligatorisch." },
+    ]
+  },
+
+  "3_topup": {
+    icon:"🔁", iconCls:"si-rsa", title:"RSA TOP-UP — WOCHE 3",
+    sub:"Nach Teamtraining · Di 24.06 + Fr 27.06 · je ~15 Min", dur:"~15 Min je", int:"Mittel-Hoch", focus:"Di Linear · Fr 3×4 @ 1:6 (Progression)",
+    note:"<b>RSA Top-Up WK3 Progression:</b> Freitag: 3×4 @ 16s Pause (1:6) statt 2×5. Nur wenn WK2 Qualität gehalten. Dienstag bleibt gleich.",
+    blocks:[
+      { num:"01", title:"RSA Dienstag", sub:"2×5 @ 4s / 32s Linear", tag:"tt-rsa", tagLabel:"RSA",
+        body: rsaHTML(2,5,'4s','32s','1:30 min','Linear'),
+        goal:"Gleichbleibend wie WK1–2. Benchmark-Qualität halten." },
+      { num:"02", title:"RSA Freitag — Progression WK3", sub:"3×4 @ 4s / 16s Stop-and-Go", tag:"tt-rsa", tagLabel:"RSA Progression",
+        goal:"Neue Progression: 3 Sets statt 2. Dichte 1:4. Nur wenn WK2 gut war.",
+        body: rsaHTML(3,4,'4s','16s','2 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          'Start Mitte · 20m Total · 16s Pause = erhöhte Dichte 1:4') + `<div class="alert"><b>Voraussetzung:</b> WK2 Freitag Qualität war gut (kein Abfall > 10% Sprint 10 vs Sprint 1). Sonst bei 2×5 / 25s bleiben.</div>` },
+    ]
+  },
+
+  // ═══ WOCHE 4 ═══
+
+  "4_mi": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 7 — DELOAD SPEED",
+    sub:"Eigenständige Einheit · 02.07", dur:"~45 Min", int:"Mittel", focus:"Qualität halten, Volumen –25% vs WK3",
+    note:"<b>WK4 Deload Mittwoch:</b> Kein neues Stimulus. Keine Volumenerhöhung. Sprint-Qualität gleich oder leicht höher. Ziel: erholt in die Ferien gehen.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"Topspeed-Fokus · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('topspeed'), goal:"Vollständiges Warm-Up auch im Deload." },
+      { num:"02", title:"Plyos — Deload", sub:"Reduziert · ~8 Min", tag:"tt-plyo", tagLabel:"Plyos Deload",
+        goal:"Signal erhalten, nicht belasten.",
+        body: tblHTML([
+          ['Übung','Sets×Reps','Rest'],
+          ['Pogo Jump bilateral','3×10','45s'],
+          ['Alt-Leg Bound auf Weite (2 Schritte)','2×4','75s'],
+          ['Single-Leg Hop einbeinig','2×6 je','60s'],
+        ]) },
+      { num:"03", title:"Sprint-Block — Qualität", sub:"Reduziert, volle Intensität · ~18 Min", tag:"tt-sprint", tagLabel:"Sprint Deload",
+        goal:"Max Qualität, kein Volumen. Flying Sprint und Acceleration.",
+        body: tblHTML([
+          ['Vol.','Typ','Distanz','Rest','Intensität'],
+          ['2×','Steigerungslauf → Flying Sprint','build → 20m','2min','100%'],
+          ['3×','Freier Sprint Acceleration','20m','2min','100% Qualität'],
+        ]) },
+      { num:"04", title:"Prävention", sub:"8 Min", tag:"tt-prev", tagLabel:"Prävention",
+        body: prevBody(25), goal:"Nicht weglassen auch im Deload." },
+    ]
+  },
+
+  "4_sa": {
+    icon:"⚡", iconCls:"si-sprint", title:"SPRINT SESSION 8 — LETZTER TAG VOR FERIEN",
+    sub:"Eigenständige Einheit · 05.07", dur:"~40 Min", int:"Mittel", focus:"CoD Qualität · Kurze Einheit · Ferien!",
+    note:"<b>WK4 Samstag · Letzter Tag:</b> Max 40 Min Total. CoD-Qualität zeigen, kein RSA-Block. Cool-Down mit aktiver Mobilität → Ferien.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"CoD · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('cod'), goal:"Vollständig auch bei kurzer Einheit." },
+      { num:"02", title:"Plyos — Minimal", sub:"2 Übungen · ~7 Min", tag:"tt-plyo", tagLabel:"Plyos",
+        goal:"Signal CoD-Mechanik halten.",
+        body: tblHTML([
+          ['Übung','Sets×Reps','Rest'],
+          ['Skater Jump lateral','3×6 je','45s'],
+          ['Lateral Bound bilateral','2×5 je','45s'],
+        ]) },
+      { num:"03", title:"CoD Sprint — Kurz, Max Qualität", sub:"T-Drill + 5-10-5", tag:"tt-cod", tagLabel:"CoD",
+        goal:"Qualität zeigen. Keine RSA, kein Volumen.",
+        body: tblHTML([
+          ['Vol.','Typ','Rest','Fokus'],
+          ['2× je Seite','T-Drill','45s','CoD sauber – letzter Eindruck'],
+          ['2× je Seite','5–10–5 Drill','45s','Stop-and-Go Qualität'],
+        ]) + `<div class="alert alert-green"><b>Danach:</b> Copenhagen 3×20s je Seite → 10 Min aktive Mobilität (Hüfte, Sprunggelenk, BWS) → FERIEN! 🎉</div>` },
+    ]
+  },
+
+  "4_topup": {
+    icon:"🔁", iconCls:"si-rsa", title:"RSA TOP-UP — WOCHE 4",
+    sub:"Di 01.07 + Fr 04.07 · je ~15 Min", dur:"~15 Min je", int:"Mittel", focus:"Deload RSA · Signal erhalten",
+    note:"<b>RSA Top-Up WK4 Deload:</b> Volumen –30%. Qualität erhalten. Letzter RSA-Block vor Ferien.",
+    blocks:[
+      { num:"01", title:"RSA Dienstag", sub:"2×4 @ 4s / 32s Linear", tag:"tt-rsa", tagLabel:"RSA Deload",
+        goal:"Reduziert vs WK3. Signal erhalten.",
+        body: rsaHTML(2,4,'4s','32s','2 min','Linear') },
+      { num:"02", title:"RSA Freitag", sub:"2×4 @ 4s / 32s Stop-and-Go", tag:"tt-rsa", tagLabel:"RSA Deload",
+        goal:"Gleiches Protokoll Di. Letzte Einheit vor Ferien.",
+        body: rsaHTML(2,4,'4s','32s','2 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          'Start Mitte · 20m Total · Deload: längere Pause 32s') },
+    ]
+  },
+
+  // ═══ FERIEN (special screen) ═══
+
+  "ferien": {
+    special: true,
+    html: `<div class="ferien-screen">
+      <div class="big-icon">🌴</div>
+      <h2>VOLLSTÄNDIGE ERHOLUNG</h2>
+      <p>06.07 – 19.07.2026 · 2 Wochen · WK5 & WK6</p>
+      <div class="alert" style="text-align:left;margin-bottom:20px"><b>Direktive:</b> KEIN strukturiertes Training. Keine halben Sachen. Trainingsresiduen Reaktivkraft = 10–15 Tage → Restart WK7 nahezu auf gleichem Niveau. Übertraining in dieser Phase stiehlt Adaptationspotenzial für den Restart.</div>
+      <div class="ferien-rules">
+        <div class="rule green"><div class="rule-icon">✅</div><div class="rule-text"><b>Polysportiv erlaubt:</b> Schwimmen, Velo, Wandern, Beachvolleyball, Tennis — alles was Spass macht und locker ist.</div></div>
+        <div class="rule green"><div class="rule-icon">😴</div><div class="rule-text"><b>8–9h Schlaf / Nacht.</b> Dunkler, ruhiger Raum. Handydistanz 30 Min vor Schlafen.</div></div>
+        <div class="rule green"><div class="rule-icon">🥗</div><div class="rule-text"><b>Ausgewogene Ernährung:</b> 3 Mahlzeiten + Snacks. Protein + KH + Gemüse. 3–3.5L Wasser/Tag.</div></div>
+        <div class="rule green"><div class="rule-icon">🧘</div><div class="rule-text"><b>Optional:</b> 10 Min Mobilität täglich (Sprunggelenk, Hüfte, BWS) — nur wenn gewollt, kein Zwang.</div></div>
+        <div class="rule red"><div class="rule-icon">🚫</div><div class="rule-text"><b>Verboten:</b> Sprinten, HIIT, Krafttraining, RSA, GPS-Läufe, strukturiertes Fussballtraining.</div></div>
+        <div class="rule red"><div class="rule-icon">🚫</div><div class="rule-text"><b>Kein Training aus Social-Media-Druck.</b> Wer sich in Woche 7 stark fühlt, hat Woche 5–6 richtig gemacht.</div></div>
+      </div>
+    </div>`
+  },
+
+  "glossar": {
+    special: true,
+    html: `<div style="padding:0 0 20px">
+
+    <div style="margin-bottom:18px">
+      <div style="font-family:var(--heading);font-size:28px;letter-spacing:.03em;color:var(--accent4);margin-bottom:4px">DRILL-BIBLIOTHEK</div>
+      <div style="font-size:12px;color:var(--muted)">Alle Übungen im Programm — Ausführung, Ziel und Transfer</div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent4);margin:18px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(56,189,248,0.25)">🏃 LAUF-ABC & SPRINT MECHANICS</div>
+    <div class="drills">
+      <div class="drill d-topspeed"><div class="drill-name">A-March (High Knee March)</div><div class="drill-detail">Knie auf Hüfthöhe heben, kontrolliertes Tempo, Arm-Opposition. Abwechselnd links/rechts.</div><div class="drill-cue">Transfer: Kniehebemechanik, Koordination Sprint</div></div>
+      <div class="drill d-topspeed"><div class="drill-name">A-Skip</div><div class="drill-detail">Wie A-March + federnde Absprungphase bilateral, rhythmisch. Beide Beine im Skip-Rhythmus.</div><div class="drill-cue">Transfer: Federkraft Sprunggelenk + Kniehebe-Koordination</div></div>
+      <div class="drill d-topspeed"><div class="drill-name">B-Skip (Peitschendruckaktion)</div><div class="drill-detail">A-Skip + Unterschenkel-Peitschbewegung (Knieextension) → Fuss aktiv unter die Hüfte ziehen. Pawing-Action.</div><div class="drill-cue">Transfer: Aktiver Bodenkontakt, Pawing-Mechanik Topspeed</div></div>
+      <div class="drill d-topspeed"><div class="drill-name">B-Run</div><div class="drill-detail">B-Skip mit voller Sprintgeschwindigkeit ausgeführt. Peitschbewegung bei Lauftempo.</div><div class="drill-cue">Transfer: Direkter Sprinttechnik-Transfer, Hüftextension</div></div>
+      <div class="drill d-topspeed"><div class="drill-name">Ankling (Low A-Skip)</div><div class="drill-detail">Minimale Kniehebung, Fokus vollständig auf reaktive Sprunggelenkarbeit. Schnelle kleine Schritte.</div><div class="drill-cue">Transfer: Sprunggelenk-Steifigkeit, hohe Schrittfrequenz</div></div>
+      <div class="drill d-topspeed"><div class="drill-name">Scissors / Schere</div><div class="drill-detail">Im Lauf: Beine alternierend vor/rückwärts scheren, hoch und schnell. Arme exaggeriert gegengleich.</div><div class="drill-cue">Transfer: Hüftbeuger-Aktivierung, Kniehebe-Frequenz</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Power Skip for Height</div><div class="drill-detail">A-Skip mit maximalem vertikalen Absprung: Knie explosiv hoch, Arm explosiv nach oben. Pro Schritt maximale Höhe.</div><div class="drill-cue">Transfer: Vertikale Kraftentwicklung → Topspeed-Phase</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Power Skip for Distance</div><div class="drill-detail">A-Skip mit maximalem horizontalen Absprung: Körper nach vorne projizieren, lange Flugweite.</div><div class="drill-cue">Transfer: Horizontale Kraft → Beschleunigung 0–20m</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Carioca</div><div class="drill-detail">Seitwärtslauf mit alternierenden Kreuzschritten (vorne/hinten). Hüfte rotiert aktiv.</div><div class="drill-cue">Transfer: Hüftmobilität, laterale Koordination, Frequenz</div></div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin:20px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(212,245,60,0.25)">⚡ SPRINT-TYPEN</div>
+    <div class="drills">
+      <div class="drill d-sprint"><div class="drill-name">Steigerungslauf</div><div class="drill-detail">40–60m: Start locker 60% → smooth auf 85–95% steigern → auslaufen. Kein abruptes Stoppen.</div><div class="drill-cue">Transfer: CNS Aktivierung, Sprinthaltung aufbauen, Warm-Up Abschluss</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Flying Sprint</div><div class="drill-detail">20m Anlaufphase bei ~80% → dann 10–20m auf absoluter Maximalgeschwindigkeit (100%).</div><div class="drill-cue">Transfer: Topspeed-Mechanik, maximale Velocity Exposure (Lucs Hauptdefizit)</div></div>
+      <div class="drill d-sprint"><div class="drill-name">In-and-Out Sprint</div><div class="drill-detail">10m voll → 10m leicht entspannen (aber nicht langsam!) → 10m wieder voll. Oder 10-20-10m.</div><div class="drill-cue">Transfer: Velocity Maintenance, Frequenz-Kontrolle unter Ermüdung</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Hollow Sprint</div><div class="drill-detail">Jog 10m → Sprint 10m → Jog 10m → Sprint 10m. Smooth transition zwischen Jog und Sprint.</div><div class="drill-cue">Transfer: Jog→Sprint Übergangsmechanik (Schrittlänge ab 10m, Lucs Schwäche)</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Resisted Sprint (Schlitten / Band)</div><div class="drill-detail">Sprint mit ~10% Geschwindigkeitsreduktion durch Schlitten (5–8kg) oder elastisches Band über 15–20m.</div><div class="drill-cue">Transfer: Horizontaler Kraftimpuls, anterior lean. Bereits WK1 für Luc nachgewiesen wirksam.</div></div>
+      <div class="drill d-sprint"><div class="drill-name">Curved Sprint</div><div class="drill-detail">Sprint auf leichter Kurve (Halbkreis, 20–30m Radius). Einmal links-, einmal rechtskurvig.</div><div class="drill-cue">Transfer: Fussball-Realität, Zentripetalkraft-Management</div></div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent2);margin:20px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(60,255,160,0.25)">🦘 PLYOMETRIE & BOUNDS</div>
+    <div class="drills">
+      <div class="drill d-plyo"><div class="drill-name">Pogo Jump bilateral</div><div class="drill-detail">Stehend: kleine Absprünge mit fast gestreckten Knien, Push vom Ballen. Federung in Sprunggelenk. Knie = fast gestreckt.</div><div class="drill-cue">Transfer: Sprunggelenk-Steifigkeit, SSC-Basisreaktivität. Erstes Mittel gegen BKZ-Problem.</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Ankle Jump einbeinig (alternierend)</div><div class="drill-detail">Wie Pogo auf einem Bein alternierend. Minimale Kniebewegung, maximale Sprunggelenkarbeit.</div><div class="drill-cue">Transfer: Unilaterale Reaktivkraft, BKZ verkürzen einbeinig</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Broad Jump bilateral → Sprint</div><div class="drill-detail">CMJ mit maximalem horizontalen Absprung (so weit wie möglich) → nach Landung sofort 3 explosive Sprint-Schritte.</div><div class="drill-cue">Transfer: Horizontale Explosivkraft direkt → Antritt</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Alternate-Leg Bound auf WEITE (Laufsprünge)</div><div class="drill-detail">Jeder Laufschritt = maximaler Weitsprung-Absprung. L-Absprung → R-Absprung abwechselnd. 4 konsekutive Bounding-Schritte so weit wie möglich.</div><div class="drill-cue">Transfer: Schrittlänge direkt → Topspeed-Phase (Lucs Hauptdefizit laut Schrittanalyse)</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Alternate-Leg Bound auf HÖHE</div><div class="drill-detail">Gleich wie Weite aber Fokus auf maximale vertikale Höhe pro Schritt. Knie zur Brust auf dem Apogee.</div><div class="drill-cue">Transfer: Vertikale Kraftentwicklung im Sprintschritt → Topspeed</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Single-Leg Bound auf Weite (Links-Links-Links)</div><div class="drill-detail">3 einbeinige Hops auf gleichem Bein, so weit wie möglich pro Hop. Dann Gegenseite. Horizontale Projektion maximal.</div><div class="drill-cue">Transfer: Unilaterale horizontale Kraft, Schrittlänge</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Single-Leg Bound auf Höhe</div><div class="drill-detail">Einbeinig: maximale Höhe pro Hop, Knie zur Brust am höchsten Punkt. 3–5 konsekutiv gleiches Bein.</div><div class="drill-cue">Transfer: Unilaterale vertikale Kraft</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Hürden Hop 20/40/50cm bilateral (Reaktiv)</div><div class="drill-detail">Über Hürdenreihe springen: reaktiv abspringen, kein Einsinken beim Landing. Sofort nächster Hop. Hürden = Marker, Stangen oder echte Hürden.</div><div class="drill-cue">Transfer: SSC-Reaktivität, BKZ verkürzen. WK2: 20cm → WK3: 50cm (Progression)</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Drop Jump 40cm</div><div class="drill-detail">Von 40cm Box fallen (NICHT abspringen!) → sofort maximaler Rebound-Absprung. Ziel BKZ < 0.15s (Lucs April-Wert: 0.155s).</div><div class="drill-cue">Transfer: Direkt RI2-Steigerung (Lucs Diagnostik-KPI). Härtestes Reaktivkraft-Stimulus.</div></div>
+      <div class="drill d-plyo"><div class="drill-name">Hop 2er-Schritt (hüft- + sprunggelenksdominant)</div><div class="drill-detail">Beidbeinige Hops in 2er-Rhythmus. An Treppen, Hügel oder auf Boden möglich. Kurze BKZ + aktive Hüftextension.</div><div class="drill-cue">Transfer: Hüft- und Sprunggelenk-Power kombiniert → Sprint-Transfer via sofort-Sprint nach Hops</div></div>
+      <div class="drill d-bounds"><div class="drill-name">Lateral Bound bilateral</div><div class="drill-detail">Mit beiden Beinen seitlich so weit wie möglich springen und landen. Stick-Landing mit Kontrolle.</div><div class="drill-cue">Transfer: Laterale exzentrische Bremskraft → CoD Stop-and-Go</div></div>
+      <div class="drill d-bounds"><div class="drill-name">Skater Jump (reaktiv lateral)</div><div class="drill-detail">Einbeiniger Lateralsprung: Push off rechts → Land links → sofort reaktiv zurück. Minimal pause bei Landing.</div><div class="drill-cue">Transfer: Richtungswechsel + laterale Steifigkeit → CoD-Mechanik</div></div>
+      <div class="drill d-bounds"><div class="drill-name">Hop & Hard Stop</div><div class="drill-detail">3–5m einbeinig springen → harter athletischer Stopp (beidbeinig oder Landebein). Kontroll-Landing, Knie nicht einknicken.</div><div class="drill-cue">Transfer: Exzentrische Bremskapazität → Stop-and-Go Verbesserung (direktes Ziel)</div></div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent3);margin:20px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(255,107,53,0.25)">🔄 COD & RSA</div>
+    <div class="drills">
+      <div class="drill d-cod"><div class="drill-name">T-Drill</div><div class="drill-detail">4 Stangen in T-Form. Sprint 5m gerade → Shuffle 5m rechts → Shuffle 10m links → Shuffle 5m rechts → Rückwärts 5m zur Mitte.</div><div class="drill-cue">Transfer: Multi-direktionale CoD-Qualität, Bremsen + Antritt</div></div>
+      <div class="drill d-cod"><div class="drill-name">5-10-5 Drill (Pro Agility / Stop & Go)</div><div class="drill-detail"><b>Start Mitte:</b> Sprint 5m rechts → harter Stopp (Aussenbein bremst) → Sprint 10m links → harter Stopp → Sprint 5m zurück Mitte. 20m Total. Wende über Aussenbein, nicht Kurve.</div><div class="drill-cue">Direktes Training Stop-and-Go (Lucs 33. Pzt.-Schwäche). RSA-Format = 1 Rep = 1 komplette 5-10-5.</div></div>
+      <div class="drill d-cod"><div class="drill-name">45°-Cut Sprint (kontrollierter harter Cut)</div><div class="drill-detail">Sprint 10–15m gerade → 45°-Richtungswechsel → Sprint weiter. Kontrollierter Aussenbein-Cut, kein Kurve.</div><div class="drill-cue">Transfer: Exzentrische Bremskraft, Cutting-Technik</div></div>
+      <div class="drill d-cod"><div class="drill-name">RSA Linear (4s Sprint / 32s Pause)</div><div class="drill-detail">4 Sekunden maximal geradeaus sprinten (~30–35m) → 32 Sekunden aktives Gehen zurück. 1:8 Verhältnis. 5 Reps = 1 Set.</div><div class="drill-cue">Niedrige Dichte → volle Sprintqualität. Antritt jedes Mal maximal.</div></div>
+      <div class="drill d-cod"><div class="drill-name">RSA Stop & Go = 5-10-5 Format (4s / 32–16s Pause)</div><div class="drill-detail">1 Rep = 1 vollständige 5-10-5: 5m Sprint Stop → 10m Sprint Stop → 5m Sprint. ~4–5 Sekunden Arbeitszeit. Pause = 32s (WK1) bis 16s (WK3 Peak).</div><div class="drill-cue">Direktes RSA-Training unter CoD-Anforderung. Kombination aus RSA + Stop-and-Go-Verbesserung.</div></div>
+    </div>
+
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent5);margin:20px 0 8px;padding-bottom:4px;border-bottom:1px solid rgba(192,132,252,0.25)">🛡 PRÄVENTION (Obligatorisch)</div>
+    <div class="drills">
+      <div class="drill" style="border-left:2px solid var(--accent3)"><div class="drill-name">Copenhagen Adductor Plank</div><div class="drill-detail">Seitstütz mit Oberbein auf Bank/Partner. Unterbein hebt an. 20–25s je Seite. OBLIGATORISCH nach jeder Sprint-Session.</div><div class="drill-cue">Begründung: Leistenhistorie Feb 2026. Führende Evidenz für Adduktoren-Robustheit und Leistenprävention im Fussball.</div></div>
+      <div class="drill" style="border-left:2px solid var(--accent3)"><div class="drill-name">Nordic Hamstring Curl (eccentrisch)</div><div class="drill-detail">Kniend, Fersen fixiert (Partner/Bank). Körper so langsam wie möglich nach vorne fallen lassen. 3×5 langsam.</div><div class="drill-cue">Begründung: Hamstring-Robustheit für Topspeed-Phase. Exzentrische Kraft = Verletzungsprävention + Sprintleistung.</div></div>
+      <div class="drill" style="border-left:2px solid var(--accent5)"><div class="drill-name">Side-Lying Hip Abduction</div><div class="drill-detail">Seitenlage, Oberbein gestreckt anheben bis ~45°. Kontrolle runter. 2×15 je Seite.</div><div class="drill-cue">Begründung: Gluteus medius – CoD-Stabilität und laterale Kniestabilität beim Richtungswechsel.</div></div>
+    </div>
+
+    </div>`
+  },
+
+
+  // ═══ RESTART WK7 ═══
+
+  "7_mi": {
+    icon:"🔄", iconCls:"si-green", title:"RESTART SESSION 1 — REAKTIVIERUNG ANTRITT",
+    sub:"Eigenständige Einheit · 23.07", dur:"~45 Min", int:"~80–85%", focus:"CNS reaktivieren · Qualität über Volumen · –30% vs WK3",
+    note:"<b>Restart WK7 Mittwoch:</b> Kein Stress. Intensität subjektiv 80–85%. Volumen –30% vs WK3. Sprint-Qualität muss gut sein. Kein Druck wegen Volumen.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"Standard · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('linear'), goal:"Vollständiges Warm-Up nach 2 Wochen Pause besonders wichtig." },
+      { num:"02", title:"Plyos — Reaktivierung", sub:"Einfach · ~8 Min", tag:"tt-plyo", tagLabel:"Plyos Restart",
+        goal:"Nervensystem reaktivieren, nicht maximieren. Locker starten.",
+        body: tblHTML([
+          ['Übung','Sets×Reps','Rest','Cue'],
+          ['Pogo bilateral (einfühlen)','2×10','60s','Qualität, kein Druck'],
+          ['Single-Leg Hop einbeinig','2×6 je','60s','SSC reaktivieren'],
+          ['Alt-Leg Bound auf Weite (2 Schritte)','2×4','75s','Locker, technisch sauber'],
+        ]) },
+      { num:"03", title:"Sprint-Block — Reaktivierung", sub:"Vollständige Pausen · ~18 Min", tag:"tt-sprint", tagLabel:"Sprint Restart",
+        goal:"Sprints mit 80–85% Intensität. Nervensystem reaktivieren.",
+        body: tblHTML([
+          ['Vol.','Typ','Distanz','Rest','Intensität'],
+          ['2×','Steigerungslauf','30–40m','90s','80%'],
+          ['3×','Freier Sprint Acceleration','15m','2min','90–100%, Qualität'],
+          ['2×','Flying Sprint (build → 15m)','Anlauf + 15m','2min','Topspeed reaktivieren'],
+        ]) + `<div class="alert alert-green"><b>Copenhagen Adductor Plank 3×20s je Seite</b> — nach 2 Wochen Pause Leistenprävention reaktivieren!</div>` },
+    ]
+  },
+
+  "7_sa": {
+    icon:"🔄", iconCls:"si-green", title:"RESTART SESSION 2 — COD + RSA SANFT",
+    sub:"Eigenständige Einheit · 26.07", dur:"~45 Min", int:"~85%", focus:"CoD reaktivieren · RSA sanft 1:8",
+    note:"<b>Restart WK7 Samstag:</b> CoD und RSA zurück bringen. RSA 1:8 Protokoll (sanft). Qualität vor Volumen. Letzter Tag des Programms.",
+    blocks:[
+      { num:"01", title:"Warm-Up", sub:"CoD · 18 Min", tag:"tt-warmup", tagLabel:"Warm-Up",
+        body: warmupBody('cod'), goal:"CoD-Vorbereitung nach 2 Wochen Pause." },
+      { num:"02", title:"Plyos CoD — Minimal", sub:"2 Übungen · ~8 Min", tag:"tt-plyo", tagLabel:"Plyos",
+        goal:"CoD-Reaktivkraft sanft reaktivieren.",
+        body: tblHTML([
+          ['Übung','Sets×Reps','Rest'],
+          ['Skater Jump lateral reaktiv','3×6 je','45s'],
+          ['Lateral Bound auf Weite','2×5 je','45s'],
+        ]) },
+      { num:"03", title:"CoD + RSA Sanft", sub:"T-Drill + RSA 1:8 · ~18 Min", tag:"tt-cod", tagLabel:"CoD + RSA",
+        goal:"CoD-Qualität zeigen. RSA 1:8 (sanfteste Variante) reaktivieren.",
+        body: tblHTML([
+          ['Vol.','Typ','Rest','Fokus'],
+          ['3× je','T-Drill','45s','CoD Qualität sanft'],
+          ['2× je','45°-Cut Sprint','45s','Richtungswechsel'],
+          ['2×5','RSA 4s | 32s (1:8 sanft)','2min Set','RSA reaktivieren'],
+        ]) + rsaHTML(2,5,'4s','32s','2 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          'Start Mitte · 20m Total · Restart: 1:8 sanft') +
+        `<div class="alert alert-green"><b>Programm abgeschlossen 26.07.2026.</b> 4 In-Season Wochen + Restart. Nächster Diagnostik-Test empfohlen vor Saisonbeginn → Drop Jump RI2 Vergleich mit April-Wert (41.4).</div>` },
+    ]
+  },
+
+  "7_topup": {
+    icon:"🔁", iconCls:"si-rsa", title:"RSA TOP-UP — WOCHE 7 RESTART",
+    sub:"Di 22.07 + Fr 25.07 · je ~15 Min", dur:"~15 Min je", int:"Sanft", focus:"RSA sanft reaktivieren · 1:8",
+    note:"<b>RSA Top-Up Restart:</b> Sanfter Wiedereinstieg. 1:8 Protokoll wie WK1. Qualität prüfen nach 2 Wochen Pause.",
+    blocks:[
+      { num:"01", title:"RSA Dienstag Restart", sub:"2×5 @ 4s / 32s Linear", tag:"tt-rsa", tagLabel:"RSA Restart",
+        goal:"Wie WK1 – zurück auf Einstiegsniveau.",
+        body: rsaHTML(2,5,'4s','32s','1:30 min','Linear') },
+      { num:"02", title:"RSA Freitag Restart", sub:"2×5 @ 4s / 32s Stop-and-Go", tag:"tt-rsa", tagLabel:"RSA CoD",
+        goal:"CoD-Format reaktivieren.",
+        body: rsaHTML(2,5,'4s','32s','1:30 min','5-10-5 Stop & Go') + codHTML('RSA Stop & Go = 5-10-5 Format',
+          [{dist:'5m',dir:'→ Sprint Stop'},{dist:'10m',dir:'← Sprint Stop'},{dist:'5m',dir:'→ Finish'}],
+          'Start Mitte · 20m Total · Restart: sanfter Wiedereinstieg 1:8') },
+    ]
+  },
+};
+
+// ─── WEEK/DAY CONFIG ──────────────────────────────────────────────────────────
+
+const WEEK_CONFIG = {
+  1: {
+    label:'Einstieg — Antritt + Reaktivkraft', fill:'15%',
+    days:['mi','sa','topup'],
+    dates:{mi:'11.06', sa:'14.06', topup:'Di 10.06 + Fr 13.06'},
+    names:{mi:'Mittwoch', sa:'Samstag', topup:'RSA Di+Fr'},
+    labels:{mi:'MI', sa:'SA', topup:'RSA'},
+    badges:{mi:'b-sprint', sa:'b-sprint', topup:'b-rsa'},
+    badgeLabels:{mi:'Sprint', sa:'Sprint', topup:'Top-Up'},
+  },
+  2: {
+    label:'Aufbau — Topspeed + CoD Intensiv', fill:'40%',
+    days:['mi','sa','topup'],
+    dates:{mi:'18.06', sa:'21.06', topup:'Di 17.06 + Fr 20.06'},
+    names:{mi:'Mittwoch', sa:'Samstag', topup:'RSA Di+Fr'},
+    labels:{mi:'MI', sa:'SA', topup:'RSA'},
+    badges:{mi:'b-sprint', sa:'b-sprint', topup:'b-rsa'},
+    badgeLabels:{mi:'Sprint', sa:'Sprint', topup:'Top-Up'},
+  },
+  3: {
+    label:'Peak — Reaktivkraft Hauptblock + CoD Master', fill:'75%',
+    days:['mi','sa','topup'],
+    dates:{mi:'25.06', sa:'28.06', topup:'Di 24.06 + Fr 27.06'},
+    names:{mi:'Mittwoch', sa:'Samstag', topup:'RSA Di+Fr'},
+    labels:{mi:'MI', sa:'SA', topup:'RSA'},
+    badges:{mi:'b-sprint', sa:'b-sprint', topup:'b-rsa'},
+    badgeLabels:{mi:'Sprint', sa:'Sprint', topup:'Top-Up'},
+  },
+  4: {
+    label:'Deload — Qualität halten, Ferien vorbereiten', fill:'95%',
+    days:['mi','sa','topup'],
+    dates:{mi:'02.07', sa:'05.07', topup:'Di 01.07 + Fr 04.07'},
+    names:{mi:'Mittwoch', sa:'Samstag', topup:'RSA Di+Fr'},
+    labels:{mi:'MI', sa:'SA', topup:'RSA'},
+    badges:{mi:'b-sprint', sa:'b-sprint', topup:'b-rsa'},
+    badgeLabels:{mi:'Sprint', sa:'Sprint', topup:'Top-Up'},
+  },
+  5: { label:'Vollständige Erholung — 06.07 – 19.07', fill:'0%', days:[], special: true },
+  6: {
+    label:'Restart — Reaktivierung Speed + CoD + RSA', fill:'60%',
+    days:['mi','sa','topup'],
+    dates:{mi:'23.07', sa:'26.07', topup:'Di 22.07 + Fr 25.07'},
+    names:{mi:'Mittwoch', sa:'Samstag', topup:'RSA Di+Fr'},
+    labels:{mi:'MI', sa:'SA', topup:'RSA'},
+    badges:{mi:'b-sprint', sa:'b-sprint', topup:'b-rsa'},
+    badgeLabels:{mi:'Sprint', sa:'Sprint', topup:'Top-Up'},
+  },
+  7: { label:'Drill-Bibliothek — Alle Übungen erklärt', fill:'100%', days:[], special: true, specialKey: 'glossar' },
+};
+
+let currentWeek = 1;
+let currentDay = 'mi';
+
+function setWeek(w) {
+  currentWeek = w;
+  currentDay = WEEK_CONFIG[w].days[0] || 'mi';
+  document.querySelectorAll('.week-tab').forEach((t,i) => t.classList.toggle('active', i+1===w));
+  const cfg = WEEK_CONFIG[w];
+  document.getElementById('prog-label').textContent = cfg.label;
+  document.getElementById('prog-fill').style.width = cfg.fill || '0%';
+  if (cfg.special) {
+    document.getElementById('day-strip').innerHTML = '';
+    const key = cfg.specialKey || 'ferien';
+    document.getElementById('session-container').innerHTML = SESSIONS[key].html;
+    return;
+  }
+  renderDayStrip();
+  renderSession();
+}
+
+function setDay(day) {
+  currentDay = day;
+  renderDayStrip();
+  renderSession();
+}
+
+function renderDayStrip() {
+  const cfg = WEEK_CONFIG[currentWeek];
+  const strip = document.getElementById('day-strip');
+  strip.innerHTML = cfg.days.map(d =>
+    `<div class="day-btn${d===currentDay?' active':''}" onclick="setDay('${d}')">
+      <div class="day-btn-label">${cfg.names[d]}</div>
+      <div class="day-btn-name">${cfg.labels[d]}</div>
+      <div class="day-btn-date">${cfg.dates[d]}</div>
+      <span class="day-btn-badge ${cfg.badges[d]}">${cfg.badgeLabels[d]}</span>
+    </div>`
+  ).join('') + '<div class="day-btn inactive"><div class="day-btn-label">Do+So</div><div class="day-btn-name">—</div><div class="day-btn-date">Regeneration</div></div>';
+}
+
+function renderSession() {
+  const weekKey = currentWeek === 6 ? '7' : String(currentWeek);
+  const key = `${weekKey}_${currentDay}`;
+  const s = SESSIONS[key];
+  if (!s) return;
+  const container = document.getElementById('session-container');
+
+  const blocksHTML = s.blocks.map((b, i) => {
+    const noteHTML = b.note ? `<div class="note-box">📌 ${b.note}</div>` : '';
+    return `<div class="block-card${i===0?' open':''}">
+      <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="block-header-left">
+          <div class="block-num">${b.num}</div>
+          <div class="block-info"><h4>${b.title}</h4><p>${b.sub}</p></div>
+        </div>
+        <div class="block-right"><span class="type-tag ${b.tag}">${b.tagLabel}</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="block-body">
+        <div class="block-goal">${b.goal}</div>
+        ${b.body}${noteHTML}
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="session-header-card">
+      <div class="session-icon-big ${s.iconCls}">${s.icon}</div>
+      <div class="session-title-block">
+        <h2>${s.title}</h2>
+        <p>${s.sub}</p>
+        <div class="session-stats">
+          <div class="stat-chip"><span>Dauer: </span><b>${s.dur}</b></div>
+          <div class="stat-chip"><span>Intensität: </span><b>${s.int}</b></div>
+          <div class="stat-chip"><span>Fokus: </span><b>${s.focus}</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="session-note"><b>Einheit-Logik:</b> ${s.note}</div>
+    <div class="blocks">${blocksHTML}</div>`;
+}
+
+setWeek(1);
+</script>
+</body>
+</html>
